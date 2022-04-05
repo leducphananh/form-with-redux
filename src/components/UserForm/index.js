@@ -1,38 +1,26 @@
-import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { addUser, resetUser, setUser, updateUser } from 'redux/actions/UserActions';
 import Validate from './Validate';
-
-UserForm.propTypes = {
-    userGlobalState: PropTypes.object,
-    onSubmit: PropTypes.func,
-    onUpdate: PropTypes.func,
-    onResetForm: PropTypes.func,
-};
-
-UserForm.defaultProps = {
-    userGlobalState: {},
-    onSubmit: null,
-    onUpdate: null,
-    onResetForm: null,
-}
 
 function UserForm(props) {
 
-    const { userGlobalState, onSubmit, onUpdate, onResetForm } = props;
+    const user = useSelector(state => state.user.user);
+    const dispatch = useDispatch();
 
-    const [user, setUser] = useState({
-        ...userGlobalState
-    });
+    const history = useHistory();
 
     const [error, setError] = useState({});
 
     const handleCheckbox = (id) => {
         const isChecked = user.courses.includes(id);
         const newCourse = isChecked ? user.courses.filter(item => item !== id) : [...user.courses, id];
-        setUser({
+        const action = setUser({
             ...user,
             courses: newCourse
-        });
+        })
+        dispatch(action);
     }
 
     const handleSubmitForm = (e) => {
@@ -44,8 +32,9 @@ function UserForm(props) {
             return;
         }
 
-        if (!onSubmit) return;
-        onSubmit(user);
+        const action = addUser(user);
+        dispatch(action);
+        history.push('/home');
     }
 
     const handleUpdateForm = (e) => {
@@ -57,18 +46,15 @@ function UserForm(props) {
             return;
         }
 
-        if (!onUpdate) return;
-        onUpdate(user);
+        const action = updateUser(user);
+        dispatch(action);
+        history.push('/home');
     }
 
     useEffect(() => {
-        setUser(userGlobalState);
-    }, [userGlobalState])
-
-    useEffect(() => {
         return () => {
-            if (!onResetForm) return;
-            onResetForm();
+            const action = resetUser();
+            dispatch(action);
         }
     }, []);
 
@@ -86,10 +72,10 @@ function UserForm(props) {
                     <input
                         value={user.name}
                         onChange={e => {
-                            setUser({
+                            dispatch(setUser({
                                 ...user,
                                 name: e.target.value
-                            })
+                            }))
                             error.name = null;
                         }}
                         onBlur={() => {
@@ -110,10 +96,10 @@ function UserForm(props) {
                         <div className="form-item">
                             <input
                                 onChange={e => {
-                                    setUser({
+                                    dispatch(setUser({
                                         ...user,
                                         gender: e.target.value
-                                    })
+                                    }))
                                 }}
                                 type="radio"
                                 name="gender"
@@ -125,10 +111,10 @@ function UserForm(props) {
                         <div className="form-item">
                             <input
                                 onChange={e => {
-                                    setUser({
+                                    dispatch(setUser({
                                         ...user,
                                         gender: e.target.value
-                                    })
+                                    }))
                                 }}
                                 type="radio"
                                 name="gender"
@@ -144,10 +130,10 @@ function UserForm(props) {
                     <input
                         value={user.dob}
                         onChange={e => {
-                            setUser({
+                            dispatch(setUser({
                                 ...user,
                                 dob: e.target.value
-                            })
+                            }))
                             error.dob = null;
                         }}
                         onBlur={() => {
@@ -167,10 +153,10 @@ function UserForm(props) {
                     <input
                         value={user.phone}
                         onChange={e => {
-                            setUser({
+                            dispatch(setUser({
                                 ...user,
                                 phone: e.target.value
-                            })
+                            }))
                             error.phone = null;
                         }}
                         onBlur={() => {
@@ -191,10 +177,10 @@ function UserForm(props) {
                     <input
                         value={user.email}
                         onChange={e => {
-                            setUser({
+                            dispatch(setUser({
                                 ...user,
                                 email: e.target.value
-                            })
+                            }))
                             error.email = null;
                         }}
                         onBlur={() => {
@@ -215,10 +201,10 @@ function UserForm(props) {
                     <select
                         value={user.address}
                         onChange={e => {
-                            setUser({
+                            dispatch(setUser({
                                 ...user,
                                 address: e.target.value
-                            })
+                            }))
                             error.address = null;
                         }}
                         onBlur={() => {
@@ -243,10 +229,10 @@ function UserForm(props) {
                     <textarea
                         value={user.description}
                         onChange={e => {
-                            setUser({
+                            dispatch(setUser({
                                 ...user,
                                 description: e.target.value
-                            })
+                            }))
                         }}
                         name="description"
                         rows="8">

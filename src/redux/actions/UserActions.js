@@ -28,6 +28,13 @@ export const deleteUser = (id) => {
 
 export const resetUser = () => {
     return {
-        type: 'RESET_USER'
+        type: 'RESET_USER',
+    }
+}
+
+export const changeSearchTerm = (searchTerm) => {
+    return {
+        type: 'CHANGE_SEARCH',
+        payload: searchTerm,
     }
 }

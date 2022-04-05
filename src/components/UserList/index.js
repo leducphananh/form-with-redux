@@ -1,34 +1,28 @@
-import PropTypes from 'prop-types';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { deleteUser, setUser } from 'redux/actions/UserActions';
 
-UserList.propTypes = {
-    listUsers: PropTypes.array,
-    onEditClick: PropTypes.func,
-    onDeleteClick: PropTypes.func,
-};
+function UserList() {
 
-UserList.defaultProps = {
-    listUsers: [],
-    onEditClick: null,
-    onDeleteClick: null,
-}
+    const listUsers = useSelector(state => state.user.listUsers);
+    const dispatch = useDispatch();
 
-function UserList(props) {
-
-    const { listUsers, onEditClick, onDeleteClick } = props;
+    const history = useHistory();
 
     const handleEditClick = (user) => {
-        if (!onEditClick) return;
-        onEditClick(user);
+        const action = setUser(user);
+        dispatch(action);
+        history.push(`/edit/${user.id}`);
     }
 
     const handleDeleteClick = (id) => {
-        if (!onDeleteClick) return;
-        onDeleteClick(id);
+        const action = deleteUser(id);
+        dispatch(action);
     }
 
     return (
-        <div className="data">
+        <>
             <h2>List Users</h2>
             <table className="table table-bordered">
                 <thead>
@@ -74,7 +68,7 @@ function UserList(props) {
                     ))}
                 </tbody>
             </table>
-        </div >
+        </>
     );
 }
 

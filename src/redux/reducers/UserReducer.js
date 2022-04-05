@@ -45,6 +45,7 @@ const UserReducer = (state = initialState, action) => {
                 }
                 return user;
             })
+            localStorage.setItem('users', JSON.stringify(newUpdateUsers));
             return {
                 ...state,
                 listUsers: [...newUpdateUsers],
@@ -63,6 +64,13 @@ const UserReducer = (state = initialState, action) => {
                     description: '',
                     courses: [],
                 },
+            }
+        case 'CHANGE_SEARCH':
+            let newSearchUsers = localStorage.getItem('users') ? JSON.parse(localStorage.getItem('users')) : [];
+            newSearchUsers = newSearchUsers.filter(user => user.name.toLowerCase().includes(action.payload.toLowerCase()));
+            return {
+                ...state,
+                listUsers: [...newSearchUsers],
             }
         default:
             return state;
