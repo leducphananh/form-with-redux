@@ -22,6 +22,7 @@ const Search = () => {
             <input
                 value={searchTerm}
                 onChange={handleSearchTermChange}
+                autoComplete='off'
                 id='search-term'
                 className='search-form__input'
             />
